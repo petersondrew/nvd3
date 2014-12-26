@@ -97,7 +97,8 @@ nv.interactiveGuideline = function() {
                     if (isMSIE) {
                         if (d3.event.relatedTarget
                             && d3.event.relatedTarget.ownerSVGElement === undefined
-                            && d3.event.relatedTarget.className.match(tooltip.nvPointerEventsClass)) {
+                            && (d3.event.relatedTarget.className === undefined
+                                || d3.event.relatedTarget.className.match(tooltip.nvPointerEventsClass))) {
 
                             return;
                         }
