@@ -160,7 +160,7 @@ nv.utils.calcApproxTextWidth = function (svgTextElem) {
     if (typeof svgTextElem.style === 'function'
         && typeof svgTextElem.text === 'function') {
 
-        var fontSize = parseInt(svgTextElem.style("font-size").replace("px",""));
+        var fontSize = parseInt(svgTextElem.style("font-size").replace("px",""), 10);
         var textLength = svgTextElem.text().length;
         return textLength * fontSize * 0.5;
     }
@@ -289,7 +289,7 @@ gives:  {a: 2, b: 3, c: 4}
 nv.utils.deepExtend = function(dst){
     var sources = arguments.length > 1 ? [].slice.call(arguments, 1) : [];
     sources.forEach(function(source) {
-        for (key in source) {
+        for (var key in source) {
             var isArray = dst[key] instanceof Array;
             var isObject = typeof dst[key] === 'object';
             var srcObj = typeof source[key] === 'object';

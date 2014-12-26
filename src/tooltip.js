@@ -62,11 +62,11 @@
         //By default, the tooltip model renders a beautiful table inside a DIV.
         //You can override this function if a custom tooltip is desired.
         var contentGenerator = function(d) {
-            if (content != null) {
+            if (content !== null) {
                 return content;
             }
 
-            if (d == null) {
+            if (d === null) {
                 return '';
             }
 
@@ -141,7 +141,7 @@
                 var viewBox = (svg.node()) ? svg.attr('viewBox') : null;
                 if (viewBox) {
                     viewBox = viewBox.split(' ');
-                    var ratio = parseInt(svg.style('width')) / viewBox[2];
+                    var ratio = parseInt(svg.style('width'), 10) / viewBox[2];
 
                     position.left = position.left * ratio;
                     position.top  = position.top * ratio;
@@ -189,7 +189,7 @@
             convertViewBoxRatio();
 
             var left = position.left;
-            var top = (fixedTop != null) ? fixedTop : position.top;
+            var top = (fixedTop !== null) ? fixedTop : position.top;
 
             fastdom.write(function () {
                 var container = getTooltipContainer(contentGenerator(data));
@@ -382,7 +382,7 @@
             if( !isNaN( Elem.offsetTop ) ) {
                 offsetTop += (Elem.offsetTop);
             }
-        } while( Elem = Elem.offsetParent );
+        } while( Elem === Elem.offsetParent );
         return offsetTop;
     };
 
@@ -395,7 +395,7 @@
             if( !isNaN( Elem.offsetLeft ) ) {
                 offsetLeft += (Elem.offsetLeft);
             }
-        } while( Elem = Elem.offsetParent );
+        } while( Elem === Elem.offsetParent );
         return offsetLeft;
     };
 
@@ -406,8 +406,8 @@
     //container = tooltip DIV
     nv.tooltip.calcTooltipPosition = function(pos, gravity, dist, container) {
         fastdom.read(function() {
-            var height = parseInt(container.offsetHeight),
-                width = parseInt(container.offsetWidth),
+            var height = parseInt(container.offsetHeight, 10),
+                width = parseInt(container.offsetWidth, 10),
                 windowWidth = nv.utils.windowSize().width,
                 windowHeight = nv.utils.windowSize().height,
                 scrollTop = window.pageYOffset,
@@ -428,12 +428,13 @@
                 return nv.tooltip.findTotalOffsetLeft(Elem,left);
             };
 
+            var tLeft, tTop;
             switch (gravity) {
                 case 'e':
                     left = pos[0] - width - dist;
                     top = pos[1] - (height / 2);
-                    var tLeft = tooltipLeft(container);
-                    var tTop = tooltipTop(container);
+                    tLeft = tooltipLeft(container);
+                    tTop = tooltipTop(container);
                     if (tLeft < scrollLeft) left = pos[0] + dist > scrollLeft ? pos[0] + dist : scrollLeft - tLeft + left;
                     if (tTop < scrollTop) top = scrollTop - tTop + top;
                     if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
@@ -441,8 +442,8 @@
                 case 'w':
                     left = pos[0] + dist;
                     top = pos[1] - (height / 2);
-                    var tLeft = tooltipLeft(container);
-                    var tTop = tooltipTop(container);
+                    tLeft = tooltipLeft(container);
+                    tTop = tooltipTop(container);
                     if (tLeft + width > windowWidth) left = pos[0] - width - dist;
                     if (tTop < scrollTop) top = scrollTop + 5;
                     if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
@@ -450,8 +451,8 @@
                 case 'n':
                     left = pos[0] - (width / 2) - 5;
                     top = pos[1] + dist;
-                    var tLeft = tooltipLeft(container);
-                    var tTop = tooltipTop(container);
+                    tLeft = tooltipLeft(container);
+                    tTop = tooltipTop(container);
                     if (tLeft < scrollLeft) left = scrollLeft + 5;
                     if (tLeft + width > windowWidth) left = left - width/2 + 5;
                     if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
@@ -459,8 +460,8 @@
                 case 's':
                     left = pos[0] - (width / 2);
                     top = pos[1] - height - dist;
-                    var tLeft = tooltipLeft(container);
-                    var tTop = tooltipTop(container);
+                    tLeft = tooltipLeft(container);
+                    tTop = tooltipTop(container);
                     if (tLeft < scrollLeft) left = scrollLeft + 5;
                     if (tLeft + width > windowWidth) left = left - width/2 + 5;
                     if (scrollTop > tTop) top = scrollTop;
@@ -468,8 +469,8 @@
                 case 'none':
                     left = pos[0];
                     top = pos[1] - dist;
-                    var tLeft = tooltipLeft(container);
-                    var tTop = tooltipTop(container);
+                    tLeft = tooltipLeft(container);
+                    tTop = tooltipTop(container);
                     break;
             }
 
