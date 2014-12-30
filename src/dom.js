@@ -5,7 +5,9 @@
  * implementations in the future.
  */
 nv.dom.write = function(callback) {
-	if (typeof(window.fastdom) !== 'undefined') return fastdom.write(callback);
+	if (window.fastdom !== undefined) {
+		return fastdom.write(callback);
+	}
 	return callback();
 };
 
@@ -16,6 +18,8 @@ nv.dom.write = function(callback) {
  * implementations in the future.
  */
 nv.dom.read = function(callback) {
-	if (typeof(window.fastdom) !== 'undefined') return fastdom.read(callback);
+	if (window.fastdom !== undefined) {
+		return fastdom.read(callback);
+	}
 	return callback();
 };
