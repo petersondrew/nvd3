@@ -149,7 +149,7 @@ nv.interactiveGuideline = function() {
             layer.renderGuideLine = function(x) {
                 if (!showGuideLine) return;
                 if (layer.guideLine && layer.guideLine.attr("x1") === x) return;
-                fastdom.write(function() {
+                nv.dom.write(function() {
                     var line = wrap.select(".nv-interactiveGuideLine")
                         .selectAll("line")
                         .data((x != null) ? [nv.utils.NaNtoZero(x)] : [], String);

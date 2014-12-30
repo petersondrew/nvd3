@@ -191,11 +191,11 @@
             var left = position.left;
             var top = (fixedTop !== null) ? fixedTop : position.top;
 
-            fastdom.write(function () {
+            nv.dom.write(function () {
                 var container = getTooltipContainer(contentGenerator(data));
                 tooltipElem = container;
                 if (chartContainer) {
-                    fastdom.read(function() {
+                    nv.dom.read(function() {
                         var svgComp = chartContainer.getElementsByTagName("svg")[0];
                         var boundRect = (svgComp) ? svgComp.getBoundingClientRect() : chartContainer.getBoundingClientRect();
                         var svgOffset = {left:0,top:0};
@@ -405,7 +405,7 @@
     //dist = how far away from the mouse to place tooltip
     //container = tooltip DIV
     nv.tooltip.calcTooltipPosition = function(pos, gravity, dist, container) {
-        fastdom.read(function() {
+        nv.dom.read(function() {
             var height = parseInt(container.offsetHeight, 10),
                 width = parseInt(container.offsetWidth, 10),
                 windowWidth = nv.utils.windowSize().width,
@@ -475,7 +475,7 @@
             }
 
             var opacity = container.style.opacity;
-            fastdom.write(function() {
+            nv.dom.write(function() {
                 var translate = 'translate(' + left + 'px, ' + top + 'px)';
                 container.style.transform = translate;
                 if (opacity != 1) container.style.opacity = 1;
@@ -490,7 +490,7 @@
         // Find the tooltips, mark them for removal by this class (so others cleanups won't find it)
         var tooltips = document.querySelectorAll('.nvtooltip');
         if (tooltips) {
-            fastdom.write(function() {
+            nv.dom.write(function() {
                 for (var i = 0; i < tooltips.length; i++) {
                     tooltips[i].className = 'nvtooltip-pending-removal';
                 }

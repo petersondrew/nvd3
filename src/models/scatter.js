@@ -402,13 +402,13 @@ nv.models.scatter = function() {
     // utility function calls provided by this chart
     chart._calls = new function() {
         this.clearHighlights = function () {
-            fastdom.write(function() {
+            nv.dom.write(function() {
                 d3.selectAll(".nv-chart-" + id + " .nv-point.hover").classed("hover", false);
             });
             return null;
         };
         this.highlightPoint = function (seriesIndex, pointIndex, isHoverOver) {
-            fastdom.write(function() {
+            nv.dom.write(function() {
                 var node = document.querySelector(".nv-chart-" + id + " .nv-series-" + seriesIndex + " .nv-point-" + pointIndex);
                 d3.select(node).classed("hover", isHoverOver);
             });
