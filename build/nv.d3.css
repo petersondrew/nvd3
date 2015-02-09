@@ -1,20 +1,3 @@
-/********************
- * SVG CSS
- */
-
-
-svg {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  /* Trying to get SVG to act like a greedy block in all browsers */
-  display: block;
-  width:100%;
-  height:100%;
-}
 
 /********************
   Default CSS for an svg element nvd3 used
@@ -52,7 +35,6 @@ svg.nvd3-svg {
   padding: 1px;
   border: 1px solid rgba(0,0,0,.2);
   z-index: 10000;
-  display: block;
 
   font-family: Arial;
   font-size: 13px;
@@ -152,16 +134,12 @@ svg.nvd3-svg {
 }
 
 .nvtooltip-pending-removal {
+  position: absolute;
   pointer-events: none;
-  display: none;
 }
 
 .nvd3 text {
   font: normal 12px Arial;
-}
-
-.nvd3 .title {
- font: bold 14px Arial;
 }
 
 .nvd3 .nv-background {

@@ -186,9 +186,6 @@ nv.models.discreteBarChart = function() {
                 if (tooltips) showTooltip(e, that.parentNode);
             });
 
-            dispatch.on('tooltipHide', function() {
-                if (tooltips) nv.tooltip.cleanup();
-            });
         });
 
         renderWatch.renderEnd('discreteBar chart immediate');
@@ -206,6 +203,10 @@ nv.models.discreteBarChart = function() {
 
     discretebar.dispatch.on('elementMouseout.tooltip', function(e) {
         dispatch.tooltipHide(e);
+    });
+
+    dispatch.on('tooltipHide', function() {
+        if (tooltips) nv.tooltip.cleanup();
     });
 
     //============================================================

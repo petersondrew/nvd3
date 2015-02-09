@@ -66,11 +66,14 @@ describe 'NVD3', ->
 
             ticks = builder.$ '.nv-x.nv-axis .tick'
 
-            ticks.should.have.length 2
+            ticks.should.have.length 5
 
             expected = [
+                '-0.5'
                 '0'
+                '0.5'
                 '1'
+                '1.5'
             ]
 
             for tick,i in ticks
@@ -94,12 +97,15 @@ describe 'NVD3', ->
 
             ticks = builder.$ '.nv-y.nv-axis .tick'
 
-            ticks.should.have.length 4
+            ticks.should.have.length 7
 
             expected = [
                 '-1'
+                '-0.5'
                 '0'
+                '0.5'
                 '1'
+                '1.5'
                 '2'
             ]
 

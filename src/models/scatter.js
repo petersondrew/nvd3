@@ -49,7 +49,6 @@ nv.models.scatter = function() {
         , timeoutID
         , needsUpdate = false // Flag for when the points are visually updating, but the interactive layer is behind, to disable tooltips
         , renderWatch = nv.utils.renderWatch(dispatch, duration)
-        , _sizeRange_def = [16, 256]
         ;
 
     function chart(selection) {
@@ -93,7 +92,7 @@ nv.models.scatter = function() {
                 .range(yRange || [availableHeight, 0]);
 
             z   .domain(sizeDomain || d3.extent(seriesData.map(function(d) { return d.size }).concat(forceSize)))
-                .range(sizeRange || _sizeRange_def);
+                .range(sizeRange || [16, 256]);
 
             // If scale's domain don't have a range, slightly adjust to make one... so a chart can show a single data point
             if (x.domain()[0] === x.domain()[1] || y.domain()[0] === y.domain()[1]) singlePoint = true;
@@ -142,7 +141,6 @@ nv.models.scatter = function() {
             g.attr('clip-path', clipEdge ? 'url(#nv-edge-clip-' + id + ')' : '');
 
             function updateInteractiveLayer() {
-                needsUpdate = false;
 
                 if (!interactive) return false;
 
@@ -161,7 +159,7 @@ nv.models.scatter = function() {
                                 return [x(pX)+ Math.random() * 1e-7,
                                         y(pY)+ Math.random() * 1e-7,
                                     groupIndex,
-                                    pointIndex, point]; //temp hack to add noise until I think of a better way so there are no duplicates
+                                    pointIndex, point]; //temp hack to add noise untill I think of a better way so there are no duplicates
                             })
                             .filter(function(pointArray, pointIndex) {
                                 return pointActive(pointArray[4], pointIndex); // Issue #237.. move filter to after map, so pointIndex is correct!
@@ -169,11 +167,10 @@ nv.models.scatter = function() {
                     })
                 );
 
-                // inject series and point index for reference into voronoi
+                //inject series and point index for reference into voronoi
                 if (useVoronoi === true) {
 
-                    if (vertices.length == 0) return false;  // No active points, we're done
-                    if (vertices.length < 3) {
+                    if(vertices.length < 3) {
                         // Issue #283 - Adding 2 dummy points to the voronoi b/c voronoi requires min 3 points to work
                         vertices.push([x.range()[0] - 20, y.range()[0] - 20, null, null]);
                         vertices.push([x.range()[1] + 20, y.range()[1] + 20, null, null]);
@@ -293,19 +290,6 @@ nv.models.scatter = function() {
                                 pointIndex: i
                             });
                         })
-                        .on('dblclick', function(d,i) {
-                            if (needsUpdate || !data[d.series]) return 0; //check if this is a dummy point
-                            var series = data[d.series],
-                                point  = series.values[i];
-
-                            dispatch.elementDblClick({
-                                point: point,
-                                series: series,
-                                pos: [x(getX(point, i)) + margin.left, y(getY(point, i)) + margin.top],
-                                seriesIndex: d.series,
-                                pointIndex: i
-                            });
-                        })
                         .on('mouseover', function(d,i) {
                             if (needsUpdate || !data[d.series]) return 0; //check if this is a dummy point
                             var series = data[d.series],
@@ -332,6 +316,8 @@ nv.models.scatter = function() {
                             });
                         });
                 }
+
+                needsUpdate = false;
             }
 
             needsUpdate = true;
@@ -351,52 +337,44 @@ nv.models.scatter = function() {
                 .style('stroke-opacity', 1)
                 .style('fill-opacity', .5);
 
-            // create the points, maintaining their IDs from the original data set
+            // create the points
             var points = groups.selectAll('path.nv-point')
-                .data(function(d) {
-                    return d.values.map(
-                        function (point, pointIndex) {
-                            return [point, pointIndex]
-                        }).filter(
-                            function(pointArray, pointIndex) {
-                                return pointActive(pointArray[0], pointIndex)
-                            })
-                    });
+                .data(function(d) { return d.values });
             points.enter().append('path')
-                .style('fill', function (d) { return d.color })
-                .style('stroke', function (d) { return d.color })
-                .attr('transform', function(d) {
-                    return 'translate(' + x0(getX(d[0],d[1])) + ',' + y0(getY(d[0],d[1])) + ')'
+                .style('fill', function (d,i) { return d.color })
+                .style('stroke', function (d,i) { return d.color })
+                .attr('transform', function(d,i) {
+                    return 'translate(' + x0(getX(d,i)) + ',' + y0(getY(d,i)) + ')'
                 })
                 .attr('d',
                     nv.utils.symbol()
                     .type(getShape)
-                    .size(function(d) { return z(getSize(d[0],d[1])) })
+                    .size(function(d,i) { return z(getSize(d,i)) })
             );
             points.exit().remove();
             groups.exit().selectAll('path.nv-point')
                 .watchTransition(renderWatch, 'scatter exit')
-                .attr('transform', function(d) {
-                    return 'translate(' + x(getX(d[0],d[1])) + ',' + y(getY(d[0],d[1])) + ')'
+                .attr('transform', function(d,i) {
+                    return 'translate(' + x(getX(d,i)) + ',' + y(getY(d,i)) + ')'
                 })
                 .remove();
-            points.each(function(d) {
+            points.each(function(d,i) {
                 d3.select(this)
                     .classed('nv-point', true)
-                    .classed('nv-point-' + d[1], true)
+                    .classed('nv-point-' + i, true)
                     .classed('hover',false)
                 ;
             });
             points
                 .watchTransition(renderWatch, 'scatter points')
-                .attr('transform', function(d) {
-                    //nv.log(d, getX(d[0],d[1]), x(getX(d[0],d[1])));
-                    return 'translate(' + x(getX(d[0],d[1])) + ',' + y(getY(d[0],d[1])) + ')'
+                .attr('transform', function(d,i) {
+                    //nv.log(d,i,getX(d,i), x(getX(d,i)));
+                    return 'translate(' + x(getX(d,i)) + ',' + y(getY(d,i)) + ')'
                 })
                 .attr('d',
                     nv.utils.symbol()
                     .type(getShape)
-                    .size(function(d) { return z(getSize(d[0],d[1])) })
+                    .size(function(d,i) { return z(getSize(d,i)) })
             );
 
             // Delay updating the invisible interactive layer for smoother animation
