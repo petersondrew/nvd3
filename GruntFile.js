@@ -1,18 +1,16 @@
-
-var version = '1.7.0';
-
+var version = '1.7.1';
 module.exports = function(grunt) {
+    var _pkg = grunt.file.readJSON('package.json');
 
     //Project configuration.
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: _pkg,
         concat: {
             options: {
                 separator: '',
-                // wrap output in a function block.
-                banner: '/* nvd3 version ' + version + '(https://github.com/liquidpele/nvd3) ' +
+                banner: '/* nvd3 version ' + _pkg.version + ' (' + _pkg.url + ') ' +
                     '<%= grunt.template.today("yyyy-mm-dd") %> */\n' + '(function(){\n',
-                footer: '\nnv.version = "' + version + '";\n})();'
+                footer: '\nnv.version = "' + _pkg.version + '";\n})();'
             },
             dist: {
                 src: [
@@ -30,7 +28,7 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '/* nvd3 version ' + version + ' (https://github.com/liquidpele/nvd3) ' +
+                banner: '/* nvd3 version ' + _pkg.version + ' (' + _pkg.url + ') ' +
                     '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             js: {
@@ -71,7 +69,7 @@ module.exports = function(grunt) {
             unit: {
                 options: {
                     logLevel: 'ERROR',
-                    browsers: ['Chrome'],
+                    browsers: ['Firefox'],
                     frameworks: [ 'mocha', 'sinon-chai' ],
                     reporters: [ 'spec', 'junit', 'coverage'],
                     singleRun: true,
