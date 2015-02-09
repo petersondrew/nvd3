@@ -22,8 +22,7 @@ nv.models.multiChart = function() {
         yDomain2,
         getX = function(d) { return d.x },
         getY = function(d) { return d.y},
-        interpolate = 'monotone',
-        useVoronoi = true
+        interpolate = 'monotone'
         ;
 
     //============================================================
@@ -138,11 +137,8 @@ nv.models.multiChart = function() {
             });
 
             if (showLegend) {
-                var legendWidth = legend.align() ? availableWidth / 2 : availableWidth;
-                var legendXPosition = legend.align() ? legendWidth : 0;
-
-                legend.width(legendWidth);
                 legend.color(color_array);
+                legend.width( availableWidth / 2 );
 
                 g.select('.legendWrap')
                     .datum(data.map(function(series) {
@@ -159,7 +155,7 @@ nv.models.multiChart = function() {
                 }
 
                 g.select('.legendWrap')
-                    .attr('transform', 'translate(' + legendXPosition + ',' + (-margin.top) +')');
+                    .attr('transform', 'translate(' + ( availableWidth / 2 ) + ',' + (-margin.top) +')');
             }
 
             lines1
@@ -434,14 +430,7 @@ nv.models.multiChart = function() {
             getY = _;
             lines1.y(_);
             bars1.y(_);
-        }},
-        useVoronoi: {get: function(){return useVoronoi;}, set: function(_){
-            useVoronoi=_;
-            lines1.useVoronoi(_);
-            lines2.useVoronoi(_);
-            stack1.useVoronoi(_);
-            stack2.useVoronoi(_);
-        }},
+        }}
     });
 
     nv.utils.initOptions(chart);

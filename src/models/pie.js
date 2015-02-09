@@ -161,15 +161,7 @@ nv.models.pie = function() {
                     id: id
                 });
             });
-
-            slices.attr('fill', function(d,i) { return color(d, i); })
-            slices.attr('stroke', function(d,i) { return color(d, i); });
-
-            var paths = ae.append('path').each(function(d) {
-                this._current = d;
-            });
-
-            paths.on('click', function(d,i) {
+            ae.on('click', function(d,i) {
                 dispatch.elementClick({
                     label: getX(d.data),
                     value: getY(d.data),
@@ -180,7 +172,7 @@ nv.models.pie = function() {
                 });
                 d3.event.stopPropagation();
             });
-            paths.on('dblclick', function(d,i) {
+            ae.on('dblclick', function(d,i) {
                 dispatch.elementDblClick({
                     label: getX(d.data),
                     value: getY(d.data),
@@ -191,6 +183,14 @@ nv.models.pie = function() {
                 });
                 d3.event.stopPropagation();
             });
+
+            slices.attr('fill', function(d,i) { return color(d, i); })
+            slices.attr('stroke', function(d,i) { return color(d, i); });
+
+            var paths = ae.append('path').each(function(d) {
+                this._current = d;
+            });
+
             slices.select('path')
                 .transition()
                 .attr('d', arc)

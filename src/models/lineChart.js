@@ -325,11 +325,8 @@ nv.models.lineChart = function() {
                 if (tooltips) showTooltip(e, that.parentNode);
             });
 
-            dispatch.on('tooltipHide', function() {
-                if (tooltips) nv.tooltip.cleanup();
-            });
-
             dispatch.on('changeState', function(e) {
+
                 if (typeof e.disabled !== 'undefined' && data.length === e.disabled.length) {
                     data.forEach(function(series,i) {
                         series.disabled = e.disabled[i];
@@ -358,6 +355,10 @@ nv.models.lineChart = function() {
 
     lines.dispatch.on('elementMouseout.tooltip', function(e) {
         dispatch.tooltipHide(e);
+    });
+
+    dispatch.on('tooltipHide', function() {
+        if (tooltips) nv.tooltip.cleanup();
     });
 
     //============================================================

@@ -294,11 +294,8 @@ nv.models.historicalBarChart = function(bar_model) {
                 if (tooltips) showTooltip(e, that.parentNode);
             });
 
-            dispatch.on('tooltipHide', function() {
-                if (tooltips) nv.tooltip.cleanup();
-            });
-
             dispatch.on('changeState', function(e) {
+
                 if (typeof e.disabled !== 'undefined') {
                     data.forEach(function(series,i) {
                         series.disabled = e.disabled[i];
@@ -326,6 +323,10 @@ nv.models.historicalBarChart = function(bar_model) {
 
     bars.dispatch.on('elementMouseout.tooltip', function(e) {
         dispatch.tooltipHide(e);
+    });
+
+    dispatch.on('tooltipHide', function() {
+        if (tooltips) nv.tooltip.cleanup();
     });
 
     //============================================================
